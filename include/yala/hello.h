@@ -2,4 +2,4 @@
 
 #include <yala/yala_export.h>
 
-YALA_EXPORT void hello();
+YALA_EXPORT int add(int a, int b);

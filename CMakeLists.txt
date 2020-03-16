@@ -6,8 +6,23 @@ project(
 )
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)
 
+# Enable BUILD_TESTING option
+if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+    include(CTest)
+endif()
+
 
 # Project dependencies
+include(FetchContent)
+
+if((CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME OR YALA_BUILD_TESTING) AND BUILD_TESTING)
+    FetchContent_Declare(
+            catch2
+            GIT_REPOSITORY https://github.com/catchorg/Catch2.git
+            GIT_TAG v2.11.1
+    )
+    FetchContent_MakeAvailable(catch2)
+endif()
 
 
 # Library definition
@@ -41,4 +56,7 @@ generate_export_header(yala EXPORT_FILE_NAME include/yala/yala_export.h)
 include(install/install)
 
 add_subdirectory(bin)
-add_subdirectory(tests)
+
+if((CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME OR YALA_BUILD_TESTING) AND BUILD_TESTING)
+    add_subdirectory(tests)
+endif()
