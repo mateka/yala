@@ -26,7 +26,13 @@ endif()
 
 
 # Library definition
-add_library(yala src/hello.cpp include/yala/hello.h)
+add_library(
+    yala
+    src/hello.cpp
+    include/yala/constexpr_math.h
+    include/yala/vec.h
+    include/yala/normal.h
+)
 add_library(${PROJECT_NAME}::yala ALIAS yala)
 target_include_directories(
         yala
