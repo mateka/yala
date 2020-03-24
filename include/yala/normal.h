@@ -9,9 +9,44 @@ namespace yala {
 template<std::floating_point Scalar, std::size_t Dimensions>
 class YALA_EXPORT normal final : public vec<Scalar, Dimensions> {
 public:
+    template<std::size_t Dims = Dimensions>
+    static constexpr std::enable_if_t<Dims == Dimensions && Dims <= 4, normal> i() noexcept {
+        if constexpr (Dims == 1) return normal{Scalar{1}};
+        else if constexpr (Dims == 2)
+            return normal{Scalar{1}, Scalar{0}};
+        else if constexpr (Dims == 3)
+            return normal{Scalar{1}, Scalar{0}, Scalar{0}};
+        else if constexpr (Dims == 4)
+            return normal{Scalar{1}, Scalar{0}, Scalar{0}, Scalar{0}};
+    }
+
+    template<std::size_t Dims = Dimensions>
+    static constexpr std::enable_if_t<Dims == Dimensions && 2 <= Dims && Dims <= 4, normal>
+    j() noexcept {
+        if constexpr (Dims == 2) return normal{Scalar{0}, Scalar{1}};
+        else if constexpr (Dims == 3)
+            return normal{Scalar{0}, Scalar{1}, Scalar{0}};
+        else if constexpr (Dims == 4)
+            return normal{Scalar{0}, Scalar{1}, Scalar{0}, Scalar{0}};
+    }
+
+    template<std::size_t Dims = Dimensions>
+    static constexpr std::enable_if_t<Dims == Dimensions && 3 <= Dims && Dims <= 4, normal>
+    k() noexcept {
+        if constexpr (Dims == 3) return normal{Scalar{0}, Scalar{0}, Scalar{1}};
+        else if constexpr (Dims == 4)
+            return normal{Scalar{0}, Scalar{0}, Scalar{1}, Scalar{0}};
+    }
+
+    template<std::size_t Dims = Dimensions>
+    static constexpr std::enable_if_t<Dims == Dimensions && Dims == 4, normal> l() noexcept {
+        return normal{Scalar{0}, Scalar{0}, Scalar{0}, Scalar{1}};
+    }
+
     constexpr normal() = delete;
     template<std::floating_point... Args>
-    constexpr normal(Args... args) noexcept : normal{vec{args...}} {}
+    constexpr normal(Args... args) noexcept requires(sizeof...(Args) == Dimensions)
+        : normal{vec{args...}} {}
     constexpr normal(vec const &v) noexcept : vec{v / v.length()} {}
     constexpr normal(normal const &) noexcept = default;
     constexpr normal(normal &&) noexcept = default;

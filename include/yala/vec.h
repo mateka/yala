@@ -19,7 +19,8 @@ public:
         for (auto &e : elements_) e = Scalar{};
     }
     template<std::floating_point... Args>
-    constexpr vec(Args... args) noexcept : elements_{args...} {}
+    constexpr vec(Args... args) noexcept requires(sizeof...(Args) == Dimensions)
+        : elements_{args...} {}
     constexpr vec(vec const &) noexcept = default;
     constexpr vec(vec &&) noexcept = default;
     constexpr vec &operator=(vec const &) noexcept = default;
