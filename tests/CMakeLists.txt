@@ -1,5 +1,6 @@
 add_subdirectory(vec_tests)
 add_subdirectory(normal_tests)
+add_subdirectory(matrix_tests)
 
 
 add_executable(constexpr_math_tests constexpr_math_tests.cpp)

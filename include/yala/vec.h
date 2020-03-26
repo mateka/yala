@@ -6,7 +6,6 @@
 #include <array>
 #include <compare>
 #include <concepts>
-#include <numeric>
 #include <type_traits>
 
 
