@@ -33,6 +33,7 @@ add_library(
     include/yala/vec.h
     include/yala/normal.h
     include/yala/matrix.h
+    include/yala/matrix_vector.h
 )
 add_library(${PROJECT_NAME}::yala ALIAS yala)
 target_include_directories(

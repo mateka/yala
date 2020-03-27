@@ -11,6 +11,9 @@
 
 namespace yala {
 
+template<std::floating_point Scalar, std::size_t Dimensions>
+class vec;
+
 template<std::floating_point Scalar, std::size_t N, std::size_t M>
 class YALA_EXPORT matrix {
 public:
@@ -26,6 +29,12 @@ public:
     constexpr matrix(matrix &&) noexcept = default;
     constexpr matrix &operator=(matrix const &) noexcept = default;
     constexpr matrix &operator=(matrix &&) noexcept = default;
+
+    template<std::size_t K = N>
+    constexpr explicit matrix(vec<Scalar, K> const &v) noexcept requires((K == N && M == 1) ||
+                                                                         (K == M && N == 1)) {
+        for (std::size_t i = 0; i < v.size(); ++i) elements_[i] = v[i];
+    }
 
     constexpr Scalar &operator[](index_type const i) noexcept {
         return elements_[std::get<0>(i) + N * std::get<1>(i)];
@@ -119,7 +128,7 @@ YALA_EXPORT constexpr matrix<Scalar, K, M> operator*(matrix<Scalar, N, M> const 
 }
 
 template<std::floating_point Scalar, std::size_t N, std::size_t M>
-YALA_EXPORT constexpr matrix<Scalar, M, N> transpose(matrix<Scalar, N, M> const &mat) {
+YALA_EXPORT constexpr matrix<Scalar, M, N> transpose(matrix<Scalar, N, M> const &mat) noexcept {
     matrix<Scalar, M, N> result;
     for (std::size_t m = 0; m < M; ++m)
         for (std::size_t n = 0; n < N; ++n) result[{m, n}] += mat[{n, m}];

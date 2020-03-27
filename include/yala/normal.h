@@ -6,6 +6,9 @@
 
 namespace yala {
 
+template<std::floating_point Scalar, std::size_t N, std::size_t M>
+class matrix;
+
 template<std::floating_point Scalar, std::size_t Dimensions>
 class YALA_EXPORT normal final : public vec<Scalar, Dimensions> {
 public:
@@ -52,6 +55,12 @@ public:
     constexpr normal(normal &&) noexcept = default;
     constexpr normal &operator=(normal const &) noexcept = default;
     constexpr normal &operator=(normal &&) noexcept = default;
+
+    constexpr explicit normal(matrix<Scalar, Dimensions, 1> const &m) noexcept : normal{vec{m}} {}
+    template<std::size_t K = Dimensions>
+    constexpr explicit normal(matrix<Scalar, 1, K> const &m) noexcept requires(K == Dimensions &&
+                                                                               K > 1)
+        : normal{transpose(m)} {}
 
     constexpr normal &operator+=(vec const &v) noexcept = delete;
     constexpr normal &operator-=(vec const &v) noexcept = delete;
